@@ -299,16 +299,12 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
     _isPlaying = YES;
     [_player play]; // 调用avplayer 的play方法
     [self.playButton setImage:[UIImage imageNamed:@"Stop"] forState:(UIControlStateNormal)];
-//    [self.playerButton setImage:[UIImage imageNamed:@"player_pause_iphone_window"] forState:(UIControlStateNormal)];
-//    [self.playerFullScreenButton setImage:[UIImage imageNamed:@"player_pause_iphone_fullscreen"] forState:(UIControlStateNormal)];
 }
 
 - (void)pause {
     _isPlaying = NO;
     [_player pause];
     [self.playButton setImage:[UIImage imageNamed:@"Play"] forState:(UIControlStateNormal)];
-//    [self.playerButton setImage:[UIImage imageNamed:@"player_start_iphone_window"] forState:(UIControlStateNormal)];
-//    [self.playerFullScreenButton setImage:[UIImage imageNamed:@"player_start_iphone_fullscreen"] forState:(UIControlStateNormal)];
 }
 #pragma mark 处理点击事件
 -(void)playOrStopAction{
@@ -325,8 +321,6 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
 //
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"%f",self.width);
-    NSLog(@"%f",self.height);
     if (_touchMode == TouchPlayerViewModeNone) {
         if (_isLandscape) { // 如果当前是横屏
             if (_isShowToolbar) {
