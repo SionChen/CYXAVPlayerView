@@ -9,30 +9,56 @@
 #import "CYXAVPlayerViewController.h"
 #import "CYXAVPlayerView.h"
 #import "UIView+Size.h"
+#import "RotationScreen.h"
+#import "AppDelegate.h"
 @interface CYXAVPlayerViewController ()<CYXAVPlayerViewDelegate>
 
+
 /**
- 播放器
+ playerView初始superView
  */
-@property (nonatomic,strong) CYXAVPlayerView *playerView;
+@property (nonatomic,strong) UIView *playerViewSuperView;
+
+/**
+ playerView初始delegate
+ */
+@property (nonatomic,weak) id<CYXAVPlayerViewDelegate> playerViewdelegate;
 @end
 
 @implementation CYXAVPlayerViewController
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+-(void)viewWillAppear:(BOOL)animated{
+    AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    delegate.allowRotate = 1;
+}
+-(void)viewWillDisappear:(BOOL)animated{
+    AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    delegate.allowRotate = 0;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    
+    [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
     self.view.backgroundColor = [UIColor blackColor];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarOrientationChange:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [self initViews];
-    NSURL *url = [NSURL URLWithString:@"http://flv2.bn.netease.com/videolib3/1512/18/gLBNm0789/SD/gLBNm0789-mobile.mp4"];
-    [self.playerView updatePlayerWithURL:url];
 }
+
 -(void)initViews{
+    //self.playerViewRect = self.playerView.frame;
+    self.playerViewSuperView = self.playerView.superview;
+    self.playerViewdelegate = self.playerView.delegate;
+    
+    
     self.playerView.frame = self.view.bounds;
+    self.playerView.delegate = self;
+    self.playerView.backButton.hidden = NO;
     [self.view addSubview:self.playerView];
+    
 }
 - (void)statusBarOrientationChange:(NSNotification *)notification
 {
@@ -40,10 +66,24 @@
 }
 #pragma mark ---CYXAVPlayerViewDelegate
 -(void)enterBackgroundNotification{
-    [self dismissViewControllerAnimated:NO completion:nil];
+    //[self dismissViewControllerAnimated:NO completion:nil];
 }
 -(void)backButtonAction{
+    NSLog(@"%f ",self.playerViewRect.origin.y);
+    [self.view removeAllSubviews];
+    
+    self.playerView.frame = self.playerViewRect;
+    [self.playerViewSuperView addSubview:self.playerView];
+    self.playerView.delegate = self.playerViewdelegate;
+    self.playerView.backButton.hidden = YES;
     [self dismissViewControllerAnimated:NO completion:nil];
+}
+-(void)fullScreenButtonAction{
+    if ([RotationScreen isOrientationLandscape]) { // 如果是横屏，
+        [RotationScreen forceOrientation:(UIInterfaceOrientationPortrait)]; // 切换为竖屏
+    } else {
+        [RotationScreen forceOrientation:(UIInterfaceOrientationLandscapeRight)]; // 否则，切换为横屏
+    }
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {

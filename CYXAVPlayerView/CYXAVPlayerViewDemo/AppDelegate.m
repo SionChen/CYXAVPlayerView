@@ -17,6 +17,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
     return YES;
 }
 
@@ -46,6 +47,26 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+//此方法会在设备横竖屏变化的时候调用
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+    
+    //   NSLog(@"方向  =============   %ld", _allowRotate);
+    if (self.allowRotate == 1) {
+        return UIInterfaceOrientationMaskAll;
+    }else{
+        return (UIInterfaceOrientationMaskPortrait);
+    }
+}
 
+
+// 返回是否支持设备自动旋转
+- (BOOL)shouldAutorotate
+{
+    if (self.allowRotate == 1) {
+        return YES;
+    }
+    return NO;
+}
 
 @end

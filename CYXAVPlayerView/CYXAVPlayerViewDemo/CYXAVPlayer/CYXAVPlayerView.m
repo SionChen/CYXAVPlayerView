@@ -70,11 +70,11 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
  */
 @property (nonatomic,strong) UIButton *rotationButton;
 
-/**
- 关闭按钮
- */
-@property (nonatomic,strong) UIButton *backButton;
 
+/**
+ 发送隐藏消息的时间
+ */
+@property (nonatomic,strong) NSDate *sendHideDate;
 @end
 @implementation CYXAVPlayerView
 - (void)dealloc {
@@ -100,8 +100,8 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
         _playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
         [self.playerView.layer addSublayer:_playerLayer];
         
+        [self addSubview:self.playButton];
         [self addSubview:self.downView];
-        [self.downView addSubview:self.playButton];
         [self.downView addSubview:self.beginLabel];
         [self.downView addSubview:self.loadedProgress];
         [self.downView addSubview:self.playProgress];
@@ -113,24 +113,35 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
         self.loadedProgress.progress = 0.0;
         // setPortraintLayout
         [self setPortarintLayout];
+        
+        self.isFirstPlay = YES;
     }
     return self;
 }
 - (void)layoutSubviews {
     [super layoutSubviews];
-    _playerLayer.frame = CGRectMake(0, 0, self.width, self.height);
-    self.downView.frame = CGRectMake(0, 0, self.width, 40);
+    _playerLayer.frame = self.bounds;
+    self.downView.frame = CGRectMake(0, 0, self.width, 30);
     self.downView.bottom =self.height;
-    self.playButton.frame = CGRectMake(0, 0, 40, 40);
-    self.beginLabel.frame = CGRectMake(self.playButton.right, 0, 37, 40);
-    self.playProgress.frame = CGRectMake(self.beginLabel.right+5, 0, self.width-82*2, 40);
+    self.playButton.frame = CGRectMake(0, 0, 60, 60);
+    self.playButton.centerX = self.width/2;
+    self.playButton.centerY = self.height/2;
+    
+    self.beginLabel.frame = CGRectMake(0, 0, 40, 30);
+    self.playProgress.frame = CGRectMake(self.beginLabel.right, 0, self.width-110, 30);
     self.playProgress.centerY = self.downView.height/2;
-    self.loadedProgress.frame = CGRectMake(self.playProgress.left+2, 0, self.playProgress.width-4, 40);
+    self.loadedProgress.frame = CGRectMake(self.playProgress.left+2, 0, self.playProgress.width-4, 30);
     self.loadedProgress.centerY = self.playProgress.centerY;
-    self.endLabel.frame = CGRectMake(self.loadedProgress.right+5, 0, 37, 40);
-    self.rotationButton.frame = CGRectMake(0, 0, 40, 40);
+    self.endLabel.frame = CGRectMake(self.loadedProgress.right, 0, 40, 30);
+    self.rotationButton.frame = CGRectMake(0, 0, 30, 30);
     self.rotationButton.right = self.downView.width;
-    self.backButton.frame =  CGRectMake(self.width-16-30, 16, 40, 40);
+    self.backButton.frame =  CGRectMake(15, 15+20, 30, 30);
+    [self.rotationButton setImage:[UIImage imageNamed:[RotationScreen isOrientationLandscape]?@"RotationDown":@"RotationUp"] forState:UIControlStateNormal];
+    if (self.isFirstPlay) {
+        self.downView.alpha = 0;
+        self.backButton.alpha = 0;
+        self.playButton.alpha = 1;
+    }
 }
 #pragma mark 横竖屏约束
 - (void)setPortarintLayout {
@@ -146,11 +157,14 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
 // 显示工具条
 - (void)portraitShow {
     _isShowToolbar = YES; // 显示工具条置为 yes
-    
+    self.sendHideDate = [NSDate date];
     [UIView animateWithDuration:0.1 animations:^{
-        self.downView.bottom = self.height;
+        //self.downView.bottom = self.height;
+        self.downView.alpha = 1;
         self.backButton.alpha = 1;
+        self.playButton.alpha = 1;
     } completion:^(BOOL finished) {
+        [self performSelector:@selector(setAutoHide) withObject:nil afterDelay:3.0];
     }];
     // 显示状态条
     [[UIApplication sharedApplication] setStatusBarHidden:NO animated:YES];
@@ -161,21 +175,35 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
     
     // 约束动画
     [UIView animateWithDuration:0.1 animations:^{
-        self.downView.bottom = self.height+self.downView.height;
+        //self.downView.bottom = self.height+self.downView.height;
+        self.downView.alpha = 0;
         self.backButton.alpha = 0;
+        self.playButton.alpha = 0;
     } completion:^(BOOL finished) {
     }];
     // 隐藏状态条
     [[UIApplication sharedApplication] setStatusBarHidden:YES animated:YES];
     
 }
+
+/**
+ 自动隐藏
+ */
+-(void)setAutoHide{
+    NSDate * nowDate = [NSDate date];
+    // 需要对比的时间数据
+    NSCalendarUnit unit = NSCalendarUnitYear | NSCalendarUnitMonth
+    | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
+    // 当前日历
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *dateCom = [calendar components:unit fromDate:self.sendHideDate toDate:nowDate options:0];
+    if (self.isPlaying&&dateCom.second==3) {
+        [self portraitHide];
+    }
+}
 #pragma mark 横竖屏切换
 -(void)rotationAction{
-    if ([RotationScreen isOrientationLandscape]) { // 如果是横屏，
-        [RotationScreen forceOrientation:(UIInterfaceOrientationPortrait)]; // 切换为竖屏
-    } else {
-        [RotationScreen forceOrientation:(UIInterfaceOrientationLandscapeRight)]; // 否则，切换为横屏
-    }
+    CALL_DELEGATE(self.delegate, @selector(fullScreenButtonAction));
 }
 
 - (void)checkRotation {
@@ -202,7 +230,7 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
     // 播放完成通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackFinished:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     // 前台通知
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterForegroundNotification) name:UIApplicationWillEnterForegroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterForegroundNotification) name:UIApplicationWillEnterForegroundNotification object:nil];
     //后台通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterBackgroundNotification) name:UIApplicationDidEnterBackgroundNotification object:nil];
     //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarOrientationChange:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
@@ -243,7 +271,11 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
     self.beginLabel.text = [NSString convertTime:currentTime];
 }
 -(void)enterBackgroundNotification{
+    [self pause];
     CALL_DELEGATE(self.delegate, @selector(enterBackgroundNotification));
+}
+-(void)enterForegroundNotification{
+    
 }
 #pragma mark KVO - status
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
@@ -261,7 +293,7 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
                 // 设置视频时间
                 [self setMaxDuration:CMTimeGetSeconds(duration)];
                 // 播放
-                [self play];
+                //[self play];
                 
             } else if (status == AVPlayerStatusFailed) {
                 NSLog(@"AVPlayerStatusFailed");
@@ -297,14 +329,18 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
 }
 - (void)play {
     _isPlaying = YES;
+    if (self.isFirstPlay) {[self portraitHide];}
+    self.isFirstPlay = NO;
     [_player play]; // 调用avplayer 的play方法
-    [self.playButton setImage:[UIImage imageNamed:@"Stop"] forState:(UIControlStateNormal)];
+    [self.playButton setImage:[UIImage imageNamed:@"moviePause"] forState:(UIControlStateNormal)];
+    self.sendHideDate = [NSDate date];
+    [self performSelector:@selector(setAutoHide) withObject:nil afterDelay:3.0];
 }
 
 - (void)pause {
     _isPlaying = NO;
     [_player pause];
-    [self.playButton setImage:[UIImage imageNamed:@"Play"] forState:(UIControlStateNormal)];
+    [self.playButton setImage:[UIImage imageNamed:@"moviePlay"] forState:(UIControlStateNormal)];
 }
 #pragma mark 处理点击事件
 -(void)playOrStopAction{
@@ -321,6 +357,7 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
 //
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
+    if (self.isFirstPlay) {return;}
     if (_touchMode == TouchPlayerViewModeNone) {
         if (_isLandscape) { // 如果当前是横屏
             if (_isShowToolbar) {
@@ -390,6 +427,7 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
         _playButton = [CommonUI creatButtonWithFrame:CGRectZero backgroundColor:[UIColor clearColor] title:@"" titleFont:[UIFont systemFontOfSize:14] titleColor:[UIColor clearColor] actionBlock:^(UIControl *control) {
             [_self playOrStopAction];
         }];
+        [_playButton setImage:[UIImage imageNamed:@"moviePlay"] forState:(UIControlStateNormal)];
     }
     return _playButton;
 }
@@ -397,7 +435,8 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
     if(!_beginLabel){
         _beginLabel = [[UILabel alloc] init];
         _beginLabel.textColor = [UIColor whiteColor];
-        _beginLabel.font = [UIFont systemFontOfSize:13];
+        _beginLabel.font = [UIFont systemFontOfSize:10];
+        _beginLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _beginLabel;
 }
@@ -405,7 +444,8 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
     if(!_endLabel){
         _endLabel = [[UILabel alloc] init];
         _endLabel.textColor = [UIColor whiteColor];
-        _endLabel.font = [UIFont systemFontOfSize:13];
+        _endLabel.font = [UIFont systemFontOfSize:10];
+        _endLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _endLabel;
 }
@@ -418,7 +458,7 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
         [_playProgress addTarget:self action:@selector(playerSliderTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
         [_playProgress setMinimumValueImage:nil];
         [_playProgress setMinimumValueImage:nil];
-        [_playProgress setMinimumTrackTintColor:[UIColor clearColor]];          //左边轨道的颜色
+        [_playProgress setMinimumTrackTintColor:[UIColor redColor]];          //左边轨道的颜色
         [_playProgress setMaximumTrackTintColor:[UIColor clearColor]];
     }
     return _playProgress;
@@ -436,22 +476,20 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
         _rotationButton = [CommonUI creatButtonWithFrame:CGRectZero backgroundColor:[UIColor clearColor] title:@"" titleFont:[UIFont systemFontOfSize:14] titleColor:[UIColor clearColor] actionBlock:^(UIControl *control) {
             [_self rotationAction];
         }];
-        [_rotationButton setImage:[UIImage imageNamed:@"Rotation"] forState:UIControlStateNormal];
+        [_rotationButton setImage:[UIImage imageNamed:@"RotationUp"] forState:UIControlStateNormal];
     }
     return _rotationButton;
 }
 -(UIButton*)backButton{
     if(!_backButton){
         WS(_self);
-        _backButton = [CommonUI creatButtonWithFrame:CGRectZero backgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.4] title:@"" titleFont:[UIFont systemFontOfSize:14] titleColor:[UIColor clearColor] actionBlock:^(UIControl *control) {
+        _backButton = [CommonUI creatButtonWithFrame:CGRectZero backgroundColor:[UIColor clearColor] title:@"" titleFont:[UIFont systemFontOfSize:14] titleColor:[UIColor clearColor] actionBlock:^(UIControl *control) {
             if ([RotationScreen isOrientationLandscape]) { // 如果是横屏，
                 [RotationScreen forceOrientation:(UIInterfaceOrientationPortrait)]; // 切换为竖屏
             }
             CALL_DELEGATE(_self.delegate, @selector(backButtonAction));
         }];
-        _backButton.layer.masksToBounds = YES;
-        _backButton.layer.cornerRadius = 20;
-        [_backButton setImage:[UIImage imageNamed:@"X"] forState:UIControlStateNormal];
+        [_backButton setImage:[UIImage imageNamed:@"movieClose"] forState:UIControlStateNormal];
         
     }
     return _backButton;
