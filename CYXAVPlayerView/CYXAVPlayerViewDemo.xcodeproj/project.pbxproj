@@ -12,14 +12,9 @@
 		5566ECAB1FD78B2E004F0E02 /* RotationScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 5566ECAA1FD78B2E004F0E02 /* RotationScreen.m */; };
 		5566ECAE1FD7909D004F0E02 /* CommonUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 5566ECAD1FD7909D004F0E02 /* CommonUI.m */; };
 		5566ECB11FD79110004F0E02 /* UIControl+Button.m in Sources */ = {isa = PBXBuildFile; fileRef = 5566ECB01FD79110004F0E02 /* UIControl+Button.m */; };
-		5566ECC01FD7976E004F0E02 /* Play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5566ECB51FD7976E004F0E02 /* Play@2x.png */; };
-		5566ECC61FD7976E004F0E02 /* Rotation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5566ECBB1FD7976E004F0E02 /* Rotation@2x.png */; };
-		5566ECC81FD7976E004F0E02 /* Stop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5566ECBD1FD7976E004F0E02 /* Stop@2x.png */; };
 		5566ECCB1FD799A2004F0E02 /* NSString+time.m in Sources */ = {isa = PBXBuildFile; fileRef = 5566ECCA1FD799A2004F0E02 /* NSString+time.m */; };
 		5566ECCE1FD79E62004F0E02 /* Slider_thumb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5566ECCC1FD79E62004F0E02 /* Slider_thumb@2x.png */; };
 		5566ECCF1FD79E62004F0E02 /* Slider_thumb@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5566ECCD1FD79E62004F0E02 /* Slider_thumb@3x.png */; };
-		5566ECD21FD7ACF9004F0E02 /* X@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5566ECD01FD7ACF9004F0E02 /* X@2x.png */; };
-		5566ECD31FD7ACF9004F0E02 /* X@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5566ECD11FD7ACF9004F0E02 /* X@3x.png */; };
 		55AE6B551FD911FD001AFFF6 /* RotationDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55AE6B511FD911FD001AFFF6 /* RotationDown@2x.png */; };
 		55AE6B561FD911FD001AFFF6 /* RotationDown@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55AE6B521FD911FD001AFFF6 /* RotationDown@3x.png */; };
 		55AE6B571FD911FD001AFFF6 /* RotationUp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55AE6B531FD911FD001AFFF6 /* RotationUp@2x.png */; };
@@ -50,15 +45,10 @@
 		5566ECAD1FD7909D004F0E02 /* CommonUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonUI.m; sourceTree = "<group>"; };
 		5566ECAF1FD79110004F0E02 /* UIControl+Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+Button.h"; sourceTree = "<group>"; };
 		5566ECB01FD79110004F0E02 /* UIControl+Button.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIControl+Button.m"; sourceTree = "<group>"; };
-		5566ECB51FD7976E004F0E02 /* Play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Play@2x.png"; sourceTree = "<group>"; };
-		5566ECBB1FD7976E004F0E02 /* Rotation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Rotation@2x.png"; sourceTree = "<group>"; };
-		5566ECBD1FD7976E004F0E02 /* Stop@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Stop@2x.png"; sourceTree = "<group>"; };
 		5566ECC91FD799A2004F0E02 /* NSString+time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+time.h"; sourceTree = "<group>"; };
 		5566ECCA1FD799A2004F0E02 /* NSString+time.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+time.m"; sourceTree = "<group>"; };
 		5566ECCC1FD79E62004F0E02 /* Slider_thumb@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Slider_thumb@2x.png"; sourceTree = "<group>"; };
 		5566ECCD1FD79E62004F0E02 /* Slider_thumb@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Slider_thumb@3x.png"; sourceTree = "<group>"; };
-		5566ECD01FD7ACF9004F0E02 /* X@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "X@2x.png"; sourceTree = "<group>"; };
-		5566ECD11FD7ACF9004F0E02 /* X@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "X@3x.png"; sourceTree = "<group>"; };
 		55AE6B511FD911FD001AFFF6 /* RotationDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RotationDown@2x.png"; sourceTree = "<group>"; };
 		55AE6B521FD911FD001AFFF6 /* RotationDown@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RotationDown@3x.png"; sourceTree = "<group>"; };
 		55AE6B531FD911FD001AFFF6 /* RotationUp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RotationUp@2x.png"; sourceTree = "<group>"; };
@@ -126,11 +116,6 @@
 				55AE6B5E1FD9123B001AFFF6 /* moviePlay@3x.png */,
 				5566ECCC1FD79E62004F0E02 /* Slider_thumb@2x.png */,
 				5566ECCD1FD79E62004F0E02 /* Slider_thumb@3x.png */,
-				5566ECB51FD7976E004F0E02 /* Play@2x.png */,
-				5566ECBB1FD7976E004F0E02 /* Rotation@2x.png */,
-				5566ECBD1FD7976E004F0E02 /* Stop@2x.png */,
-				5566ECD01FD7ACF9004F0E02 /* X@2x.png */,
-				5566ECD11FD7ACF9004F0E02 /* X@3x.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -248,22 +233,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5566ECD21FD7ACF9004F0E02 /* X@2x.png in Resources */,
 				5566ECCE1FD79E62004F0E02 /* Slider_thumb@2x.png in Resources */,
-				5566ECD31FD7ACF9004F0E02 /* X@3x.png in Resources */,
 				55AE6B5F1FD9123B001AFFF6 /* movieClose@2x.png in Resources */,
 				55C7C7041FD6A50A00996DCF /* LaunchScreen.storyboard in Resources */,
 				55AE6B621FD9123B001AFFF6 /* moviePause@3x.png in Resources */,
 				55AE6B601FD9123B001AFFF6 /* movieClose@3x.png in Resources */,
 				55AE6B631FD9123B001AFFF6 /* moviePlay@2x.png in Resources */,
-				5566ECC61FD7976E004F0E02 /* Rotation@2x.png in Resources */,
 				55AE6B611FD9123B001AFFF6 /* moviePause@2x.png in Resources */,
 				55AE6B571FD911FD001AFFF6 /* RotationUp@2x.png in Resources */,
 				55AE6B581FD911FD001AFFF6 /* RotationUp@3x.png in Resources */,
 				55AE6B561FD911FD001AFFF6 /* RotationDown@3x.png in Resources */,
 				55C7C7011FD6A50A00996DCF /* Assets.xcassets in Resources */,
-				5566ECC81FD7976E004F0E02 /* Stop@2x.png in Resources */,
-				5566ECC01FD7976E004F0E02 /* Play@2x.png in Resources */,
 				55AE6B641FD9123B001AFFF6 /* moviePlay@3x.png in Resources */,
 				5566ECCF1FD79E62004F0E02 /* Slider_thumb@3x.png in Resources */,
 				55C7C6FF1FD6A50A00996DCF /* Main.storyboard in Resources */,

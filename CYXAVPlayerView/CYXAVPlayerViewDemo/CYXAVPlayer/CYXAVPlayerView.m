@@ -385,11 +385,11 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
 }
 -(void)playerSliderTouchUpInside{
     _isSliding = NO; // 滑动结束
-    CMTime changedTime = CMTimeMakeWithSeconds(self.playProgress.value, 1.0);
-    NSLog(@"%.2f", self.playProgress.value);
-    [_playerItem seekToTime:changedTime completionHandler:^(BOOL finished) {
-        // 跳转完成后做某事
-    }];
+//    CMTime changedTime = CMTimeMakeWithSeconds(self.playProgress.value, 1.0);
+//    NSLog(@"%.2f", self.playProgress.value);
+//    [_playerItem seekToTime:changedTime completionHandler:^(BOOL finished) {
+//        // 跳转完成后做某事
+//    }];
     [self play];
     
 }
@@ -405,6 +405,11 @@ if(_theDelegate != nil && [_theDelegate respondsToSelector:_selector]) { \
 //    [_playerItem seekToTime:changedTime completionHandler:^(BOOL finished) {
 //        // 跳转完成后做某事
 //    }];
+    CMTime changedTime = CMTimeMakeWithSeconds(self.playProgress.value, self.player.currentTime.timescale);
+    NSLog(@"%.2f", self.playProgress.value);
+    [self.player seekToTime:changedTime toleranceBefore:CMTimeMake(1, self.player.currentTime.timescale) toleranceAfter:CMTimeMake(1, self.player.currentTime.timescale) completionHandler:^(BOOL finished) {
+        
+    }];
 }
 #pragma mark ---G
 -(UIView*)playerView{
